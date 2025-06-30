@@ -10,6 +10,7 @@ import { Music, RefreshCw, TrendingUp, Mail, Heart, Globe, Sun, Moon, ChevronDow
 import { useToast } from '@/hooks/use-toast';
 import CountdownTimer from '@/components/CountdownTimer';
 import { useTheme } from '@/hooks/useTheme';
+import { supabase } from '../lib/supabase';
 
 // Flag Scrollwheel Component
 const FlagScrollwheel = () => {
@@ -204,24 +205,24 @@ const Index = () => {
     }
 
     setIsSubmitting(true);
-    const { error } = await supabase.from('waitlist').insert([
-      {
-        name,
-        email,
-        languages: targetLanguages,
-        created_at: new Date().toISOString(),
+    try {
+      const { error } = await supabase.from('waitlist').insert([
+        {
+          name,
+          email,
+          languages: targetLanguages,
+          created_at: new Date().toISOString(),
+        }
+      ]);
+      if (error) {
+        toast({
+          title: "Submission failed",
+          description: error.message,
+          variant: "destructive",
+        });
+        setIsSubmitting(false);
+        return;
       }
-    ]);
-    setIsSubmitting(false);
-
-    if (error) {
-      toast({
-        title: "Submission failed",
-        description: error.message,
-        variant: "destructive",
-      });
-      return;
-    } else {
       setIsSuccess(true);
       toast({
         title: "Success!",
@@ -230,7 +231,16 @@ const Index = () => {
       setName('');
       setEmail('');
       setTargetLanguages([]);
+    } catch (err: any) {
+      toast({
+        title: "Submission error",
+        description: err.message || 'An error occurred.',
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
     }
+    return;
   };
 
   const containerVariants = {
