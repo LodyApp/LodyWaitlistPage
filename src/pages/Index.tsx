@@ -6,11 +6,10 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Music, RefreshCw, TrendingUp, Mail, Heart, Globe, Sun, Moon, ChevronDown, User, Sparkles, LogOut } from 'lucide-react';
+import { Music, RefreshCw, TrendingUp, Mail, Heart, Globe, Sun, Moon, ChevronDown, User, Sparkles } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import CountdownTimer from '@/components/CountdownTimer';
 import { useTheme } from '@/hooks/useTheme';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
 
 // Flag Scrollwheel Component
 const FlagScrollwheel = () => {
@@ -324,35 +323,6 @@ const Index = () => {
       {/* Enhanced Theme Toggle Button with popup */}
       <div className="theme-toggle-container" style={{ position: 'fixed', top: 16, right: 16, zIndex: 9999 }}>
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-          {/* Logout Button */}
-          <button
-            className="logout-button"
-            style={{
-              width: 44,
-              height: 44,
-              borderRadius: '50%',
-              background: 'rgba(255,255,255,0.9)',
-              border: '1px solid #ddd',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '0 2px 12px rgba(0,0,0,0.1)',
-              cursor: 'pointer',
-              transition: 'all 0.2s ease',
-            }}
-            aria-label="Sign out"
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'rgba(255,255,255,1)';
-              e.currentTarget.style.transform = 'scale(1.05)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'rgba(255,255,255,0.9)';
-              e.currentTarget.style.transform = 'scale(1)';
-            }}
-          >
-            <LogOut size={20} stroke="#666" strokeWidth="2" />
-          </button>
-
           {/* Theme Toggle Button */}
           <button
             onClick={handleThemeClick}
