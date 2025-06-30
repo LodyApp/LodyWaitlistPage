@@ -10,9 +10,6 @@ import { Music, RefreshCw, TrendingUp, Mail, Heart, Globe, Sun, Moon, ChevronDow
 import { useToast } from '@/hooks/use-toast';
 import CountdownTimer from '@/components/CountdownTimer';
 import { useTheme } from '@/hooks/useTheme';
-import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '../lib/supabaseClient';
-import { AuthPage } from '@/components/auth/AuthPage';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 
 // Flag Scrollwheel Component
@@ -100,9 +97,6 @@ const Index = () => {
   const [showThemePopup, setShowThemePopup] = useState(false);
   const { toast } = useToast();
   const { theme, setTheme, resolvedTheme, cycleTheme, isLight, isDark, isTwlight } = useTheme();
-  const { signOut, user } = useAuth();
-  const [showAuthModal, setShowAuthModal] = useState(false);
-  const [pendingWaitlistData, setPendingWaitlistData] = useState<any>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -210,12 +204,6 @@ const Index = () => {
       return;
     }
 
-    if (!user) {
-      setPendingWaitlistData({ name, email, targetLanguages });
-      setShowAuthModal(true);
-      return;
-    }
-
     setIsSubmitting(true);
     const { error } = await supabase.from('waitlist').insert([
       {
@@ -245,18 +233,6 @@ const Index = () => {
       setTargetLanguages([]);
     }
   };
-
-  // After successful auth, if pendingWaitlistData exists, auto-submit
-  useEffect(() => {
-    if (user && pendingWaitlistData) {
-      // Call your waitlist join logic here, e.g.:
-      // joinWaitlist(pendingWaitlistData.name, pendingWaitlistData.email, pendingWaitlistData.targetLanguages);
-      setPendingWaitlistData(null);
-      setShowAuthModal(false);
-      // Optionally show a success message
-      toast({ title: "Welcome!", description: "You have joined the waitlist.", variant: "success" });
-    }
-  }, [user, pendingWaitlistData]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -350,7 +326,6 @@ const Index = () => {
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
           {/* Logout Button */}
           <button
-            onClick={() => signOut()}
             className="logout-button"
             style={{
               width: 44,
@@ -815,12 +790,6 @@ const Index = () => {
           </motion.div>
         </motion.footer>
       </div>
-      {/* Auth Modal */}
-      <Dialog open={showAuthModal} onOpenChange={setShowAuthModal}>
-        <DialogContent>
-          <AuthPage />
-        </DialogContent>
-      </Dialog>
     </>
   );
 };
